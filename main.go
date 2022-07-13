@@ -52,5 +52,26 @@ func main() {
 			"message": activities,
 		})
 	})
+
+	r.POST("/foo", func(insert *gin.Context) {
+
+		var user = User{UserId: 302, FirstName: "joey", LastName: "tribiani",
+			Email: "joey@gmail.com", Contact: 8957649, HashPassword: "joey", Gender: "M"}
+
+		result := db.Omit("CreatedAt").Create(&user)
+
+		if result.Error != nil {
+			insert.JSON(500, gin.H{
+				"message": result.Error,
+			})
+			return
+		}
+
+		insert.JSON(200, gin.H{
+
+			"message": "user inserted",
+		})
+
+	})
 	r.Run()
 }

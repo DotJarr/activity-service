@@ -1,8 +1,8 @@
 package main
 
-// import (
-// 	"time"
-// )
+import (
+	"time"
+)
 
 type User struct {
 	UserId       int64
@@ -12,7 +12,7 @@ type User struct {
 	Contact      int64
 	HashPassword string
 	Gender       string
-	CreatedAt    string
+	CreatedAt    time.Time
 }
 
 type Color struct {
