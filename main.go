@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/dotjarr/activity-service/internal/handlers"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -10,6 +12,16 @@ import (
 
 func main() {
 
+	//password.go
+	// password := "secret"
+	// hash, _ := HashPassword(password) // ignore error for the sake of simplicity
+
+	// fmt.Println("Password:", password)
+	// fmt.Println("Hash:    ", hash)
+
+	// match := CheckPasswordHash(password, hash)
+	// fmt.Println("Match:   ", match)
+	///////////////////////////////////////////////////////////////////////////
 	//	  dsn :="user=postgres password=postgres1234 dbname=dotjar sslmode=disable"
 	dsn := "postgres://postgres:postgres1234@localhost/dotjar?sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
@@ -40,38 +52,21 @@ func main() {
 	})
 	// listen and serve on 0.0.0.0:8080
 
-	r.GET("/allActivity", func(k *gin.Context) {
-		var activities []Activity
+	// r.GET("/allActivity", func(k *gin.Context) {
+	// 	var activities []Activity
 
-		_ = db.Joins("JOIN users ON users.user_id = activities.user_id").
-			Where("users.first_name=? ", "arvind").
-			Find(&activities)
+	// 	_ = db.Joins("JOIN users ON users.user_id = activities.user_id").
+	// 		Where("users.first_name=? ", "arvind").
+	// 		Find(&activities)
 
-		k.JSON(200, gin.H{
+	// 	k.JSON(200, gin.H{
 
-			"message": activities,
-		})
-	})
+	// 		"message": activities,
+	// 	})
+	// })
 
-	r.POST("/foo", func(insert *gin.Context) {
+	r.POST("/signup", handlers.Signup(db))
 
-		var user = User{UserId: 302, FirstName: "joey", LastName: "tribiani",
-			Email: "joey@gmail.com", Contact: 8957649, HashPassword: "joey", Gender: "M"}
-
-		result := db.Omit("CreatedAt").Create(&user)
-
-		if result.Error != nil {
-			insert.JSON(500, gin.H{
-				"message": result.Error,
-			})
-			return
-		}
-
-		insert.JSON(200, gin.H{
-
-			"message": "user inserted",
-		})
-
-	})
 	r.Run()
+
 }

@@ -1,4 +1,4 @@
-module github.com/nih13/lol
+module github.com/dotjarr/activity-service
 
 go 1.13
 
